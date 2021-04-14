@@ -65,31 +65,27 @@ const GameController = (() => {
     });
   };
 
-  const _checkForEmptyFields = board =>
-    board.every(field => {
-      return field !== '';
-    });
+  const _checkForEmptyFields = board => board.every(field => field !== '');
 
   const _checkDraw = board => {
-    if (_checkWin) return false;
-    for (let i = 0; i < 9; i++) {
-      const field = GameBoard._board.getField(i);
-      if (field === undefined) {
+    switch (true) {
+      case _checkWin(currentPlayer):
+      case !_checkForEmptyFields(board):
         return false;
-      }
+      default:
+        return true;
     }
-    return true;
   };
 
   const endGame = () => {
     // when there is a win,draw or  no empty fields anymore
     const board = GameBoard._board;
-    if (
-      _checkWin(currentPlayer) ||
-      _checkDraw(board) ||
-      _checkForEmptyFields(board)
-    ) {
-      console.log(currentPlayer, ' has won the game');
+    if (_checkDraw(board)) {
+      console.log('draw');
+      return true;
+    }
+    if (_checkWin(currentPlayer)) {
+      console.log('win');
       return true;
     }
     return false;
@@ -109,9 +105,8 @@ const displayController = (() => {
   const _markField = e => {
     const clicked = e.target;
     let num = e.target.dataset.number;
-
-    // if (!clicked.className.includes('field') || clicked.textContent !== '')
-    //   return;
+    // mark field only if it's not end game or if field is empty
+    if (e.target.textContent !== '' || GameController.endGame()) return;
     let player1 = GameController.getPlayer1();
     let player2 = GameController.getPlayer2().getMark();
     clicked.textContent = GameBoard.setField(player1, num);
@@ -119,7 +114,6 @@ const displayController = (() => {
     GameController.changeMark(player2);
     GameController.switchPlayer();
     if (GameController.endGame()) {
-      console.log('end game');
       return;
     }
   };

@@ -29,15 +29,17 @@ body {
   grid-template-columns: repeat(3, var(--tile-width));
   width: calc(3 * var(--tile-width));
   height: calc(3 * var(--tile-width));
+  vertical-align: middle;
 }
 
 .field {
   width: var(--tile-width);
   height: var(--tile-width);
   font-size: 5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: table-cell;
+  vertical-align: inherit;
+
+  /* justify-content: center;
+  align-items: center; */
   border: 1px solid black;
-  border-collapse: collapse;
 }
