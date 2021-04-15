@@ -95,14 +95,15 @@ const GameController = (() => {
   };
 
   const endGame = () => {
+    const message = document.querySelector('.message');
     // when there is a win,draw or  no empty fields anymore
     const board = GameBoard.getBoard();
     if (_checkDraw(board)) {
-      console.log('draw');
+      message.textContent = 'Draw';
       return true;
     }
     if (_checkWin(currentPlayer)) {
-      console.log('win', currentPlayer);
+      message.textContent = `${currentPlayer} has won`;
       return true;
     }
     return false;
@@ -142,8 +143,10 @@ const displayController = (() => {
 
   const clearUI = e => {
     const fields = document.querySelectorAll('.field');
+    document.querySelector('.message').textContent = '';
     // clear all the fields
     fields.forEach(field => (field.textContent = ''));
+
     // reset board to be empty array
     GameBoard.resetBoard();
   };
