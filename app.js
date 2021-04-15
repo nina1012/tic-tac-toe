@@ -10,6 +10,7 @@ const Player = mark => {
   };
 };
 
+// takes control over the board(fields)
 const GameBoard = (() => {
   const _board = ['', '', '', '', '', '', '', '', ''];
 
@@ -32,10 +33,15 @@ const GameBoard = (() => {
   };
 })();
 
+// controls the state of the game,players
 const GameController = (() => {
-  const _player1 = Player('x');
-  const _player2 = Player('o');
+  let _player1;
+  let _player2;
 
+  const setPlayers = (player1, player2) => {
+    _player1 = Player(player1);
+    _player2 = Player(player2);
+  };
   const getPlayer1 = () => _player1;
   const getPlayer2 = () => _player2;
 
@@ -88,10 +94,6 @@ const GameController = (() => {
     }
   };
 
-  const initGame = () => {
-    const player1 = getPlayer1() || Player.setMark('x');
-  };
-
   const endGame = () => {
     // when there is a win,draw or  no empty fields anymore
     const board = GameBoard.getBoard();
@@ -100,7 +102,7 @@ const GameController = (() => {
       return true;
     }
     if (_checkWin(currentPlayer)) {
-      console.log('win');
+      console.log('win', currentPlayer);
       return true;
     }
     return false;
@@ -113,22 +115,26 @@ const GameController = (() => {
     switchPlayer,
     currentPlayer,
     endGame,
-    initGame
+    setPlayers
   };
 })();
 
+// controls UI
 const displayController = (() => {
   const _markField = e => {
     const clicked = e.target;
-    let num = e.target.dataset.number;
+    let num = clicked.dataset.number;
     // mark field only if it's not end game or if field is empty
-    if (e.target.textContent !== '' || GameController.endGame()) return;
-    let player1 = GameController.getPlayer1() || Player('x');
-    let player2 = GameController.getPlayer2().getMark() || Player('o');
+    if (clicked.textContent !== '' || GameController.endGame()) return;
+
+    // player1 is whole object,because we set the current mark to the clicked field
+    let player1 = GameController.getPlayer1();
+    let player2 = GameController.getPlayer2().getMark();
     clicked.textContent = GameBoard.setField(player1, num);
 
     GameController.changeMark(player2);
     GameController.switchPlayer();
+
     if (GameController.endGame()) {
       return;
     }
@@ -152,19 +158,31 @@ const displayController = (() => {
   };
 })();
 
+// on load, refresh the page
 document.addEventListener('DOMContentLoaded', e => {
   const board = document.querySelector('.board');
+  GameController.setPlayers('x', 'o');
+  // setting up initial players
+
   board.addEventListener('click', e => displayController.render(e));
 });
 
+// clear button
 document
   .querySelector('.clear')
   .addEventListener('click', e => displayController.clearUI(e));
 
 // setting the player1, opponent will be not selected player
+// if click the players, user wants to change the own player
+// we have to change it only in that case, otherwise player1 will be x
 document.addEventListener('click', e => {
   if (!e.target.className.includes('player')) return;
+  // restart game(board, fields)
+  displayController.clearUI();
+  // markChosen will be first player always,opponent = !markChosen;
   let markChosen = e.target.id === 'x' ? 'x' : 'o';
-  // if click the players, user wants to change the own player
-  // we have to change it only in that case, otherwise player1 will be x
+  const player1 = Player(markChosen).getMark();
+  const player2 = player1 === 'x' ? 'o' : 'x';
+
+  GameController.setPlayers(player1, player2);
 });
