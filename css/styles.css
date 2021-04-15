@@ -43,3 +43,16 @@ body {
   align-items: center; */
   border: 1px solid black;
 }
+
+.player {
+  display: inline-block;
+  font-size: 3rem;
+  font-weight: 700;
+  color: blue;
+  margin: 2rem;
+}
+
+.player:hover {
+  color: blueviolet;
+  cursor: pointer;
+}
