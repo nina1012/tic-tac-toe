@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 :root {
   --tile-width: 15rem;
+  --primary: #283b4a;
+  --yellow: #f7fbff;
+  --blue: #eff6ff;
+  --font-color: white;
 }
+
 *,
 *::before,
 *::after {
@@ -11,10 +17,12 @@
 
 html {
   font-size: 62.5%;
-  font-family: sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 body {
+  background-color: var(--primary);
+  color: var(--font-color);
   box-sizing: border-box;
   min-height: 100vh;
   display: flex;
@@ -24,35 +32,133 @@ body {
   text-align: center;
 }
 
+h1 {
+  font-size: 5rem;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 1rem;
+  margin-bottom: 5rem;
+}
+
+h1::before {
+  background-color: var(--blue);
+  content: '';
+  position: absolute;
+  width: 10rem;
+  height: 3px;
+  animation: growing 10s infinite ease-in-out;
+  transform-origin: center;
+  transform: translate(-50%, -50%);
+  top: 100%;
+  left: 50%;
+}
+
+.settings {
+  /* display: none; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 15rem;
+  margin-top: 2rem;
+}
+.game {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  display: none;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(3, var(--tile-width));
   width: calc(3 * var(--tile-width));
   height: calc(3 * var(--tile-width));
-  vertical-align: middle;
 }
 
 .field {
   width: var(--tile-width);
   height: var(--tile-width);
-  font-size: 5rem;
-  display: table-cell;
-  vertical-align: inherit;
-
-  /* justify-content: center;
-  align-items: center; */
-  border: 1px solid black;
-}
-
-.player {
-  display: inline-block;
-  font-size: 3rem;
+  font-size: 6rem;
   font-weight: 700;
-  color: blue;
-  margin: 2rem;
+  border: 1.5px solid var(--blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.player:hover {
-  color: blueviolet;
+.field:nth-of-type(1),
+.field:nth-of-type(2),
+.field:nth-of-type(3) {
+  border-top: none;
+}
+
+.field:nth-of-type(7),
+.field:nth-of-type(8),
+.field:nth-of-type(9) {
+  border-bottom: none;
+}
+
+.field:nth-of-type(1),
+.field:nth-of-type(4),
+.field:nth-of-type(7) {
+  border-left: none;
+}
+.field:nth-of-type(3),
+.field:nth-of-type(6),
+.field:nth-of-type(9) {
+  border-right: none;
+}
+
+.btn {
+  background-color: var(--yellow);
+  border: none;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.7);
+  outline: none;
+  color: black;
+  display: inline-block;
+  font-size: 1.6rem;
+  font-weight: bold;
+  width: 22rem;
+  text-transform: uppercase;
+  margin: 1rem 2rem;
+  padding: 1rem 1.5rem;
+  transition: background-color 0.3s ease, color 0.2s ease, transform 0.3s ease;
+}
+
+.btn:hover {
   cursor: pointer;
+  color: var(--blue);
+}
+.btn:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.7);
+}
+.btn.active {
+  background-color: var(--blue);
+  color: var(--yellow);
+}
+
+.btn.player {
+  width: 10rem;
+}
+
+@keyframes growing {
+  0% {
+    width: 10rem;
+  }
+  25% {
+    width: 8rem;
+  }
+  50% {
+    width: 6rem;
+  }
+  75% {
+    width: 8rem;
+  }
+  100% {
+    width: 10rem;
+  }
 }

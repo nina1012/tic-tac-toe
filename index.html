@@ -9,22 +9,31 @@
     <script defer src="app.js"></script>
   </head>
   <body>
-    <div class="players">
-      <span class=" player" id="x">X</span>
-      <span class=" player" id="o">O</span>
+    <h1>Tic tac toe</h1>
+    <div class="settings">
+      <div class="options">
+        <button class="btn option" id="computer">Play with computer</button>
+        <button class="btn option" id="multiple">Play with friend</button>
+      </div>
+      <div class="players">
+        <span class="btn player" id="x">X</span>
+        <span class="btn player" id="o">O</span>
+      </div>
     </div>
-    <h3 class="message"></h3>
-    <div class="board">
-      <div class="field" data-number="0"></div>
-      <div class="field" data-number="1"></div>
-      <div class="field" data-number="2"></div>
-      <div class="field" data-number="3"></div>
-      <div class="field" data-number="4"></div>
-      <div class="field" data-number="5"></div>
-      <div class="field" data-number="6"></div>
-      <div class="field" data-number="7"></div>
-      <div class="field" data-number="8"></div>
+    <div class="game">
+      <h3 class="message"></h3>
+      <div class="board">
+        <div class="field" data-number="0"></div>
+        <div class="field" data-number="1"></div>
+        <div class="field" data-number="2"></div>
+        <div class="field" data-number="3"></div>
+        <div class="field" data-number="4"></div>
+        <div class="field" data-number="5"></div>
+        <div class="field" data-number="6"></div>
+        <div class="field" data-number="7"></div>
+        <div class="field" data-number="8"></div>
+      </div>
+      <!-- <button class="clear">Start/restart</button> -->
     </div>
-    <button class="clear">Start/restart</button>
   </body>
 </html>
