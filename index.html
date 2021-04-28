@@ -9,31 +9,36 @@
     <script defer src="app.js"></script>
   </head>
   <body>
-    <h1>Tic tac toe</h1>
-    <div class="settings">
-      <div class="options">
-        <button class="btn option" id="computer">Play with computer</button>
-        <button class="btn option" id="multiple">Play with friend</button>
+    <div class="container">
+      <h1>
+        <span class="t-word">Tic</span> <span class="t-word">tac</span>
+        <span class="t-word">toe</span>
+      </h1>
+      <div class="settings">
+        <div class="options">
+          <button class="btn option" id="computer">Play with computer</button>
+          <button class="btn option" id="multiple">Play with friend</button>
+        </div>
+        <div class="players">
+          <span class="btn player" id="x">X</span>
+          <span class="btn player" id="o">O</span>
+        </div>
       </div>
-      <div class="players">
-        <span class="btn player" id="x">X</span>
-        <span class="btn player" id="o">O</span>
+      <div class="game">
+        <h3 class="message"></h3>
+        <div class="board">
+          <div class="field" data-number="0"></div>
+          <div class="field" data-number="1"></div>
+          <div class="field" data-number="2"></div>
+          <div class="field" data-number="3"></div>
+          <div class="field" data-number="4"></div>
+          <div class="field" data-number="5"></div>
+          <div class="field" data-number="6"></div>
+          <div class="field" data-number="7"></div>
+          <div class="field" data-number="8"></div>
+        </div>
+        <!-- <button class="clear">Start/restart</button> -->
       </div>
-    </div>
-    <div class="game">
-      <h3 class="message"></h3>
-      <div class="board">
-        <div class="field" data-number="0"></div>
-        <div class="field" data-number="1"></div>
-        <div class="field" data-number="2"></div>
-        <div class="field" data-number="3"></div>
-        <div class="field" data-number="4"></div>
-        <div class="field" data-number="5"></div>
-        <div class="field" data-number="6"></div>
-        <div class="field" data-number="7"></div>
-        <div class="field" data-number="8"></div>
-      </div>
-      <!-- <button class="clear">Start/restart</button> -->
     </div>
   </body>
 </html>
