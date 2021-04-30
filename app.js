@@ -63,10 +63,14 @@ const GameController = (() => {
   let _mode;
 
   const getPlayer1 = () => _player1;
-  // const getPlayer2 = () => _player2;
+  const getPlayer2 = () => _player2;
   const getComputer = () => _computer;
   const getMode = () => _mode;
   const setMode = mode => (_mode = mode);
+  let currentPlayer;
+
+  // shows state of game or who plays when mode is multiple (play with friend)
+  const message = document.querySelector('.message');
 
   const _winningCombinations = [
     [0, 1, 2],
@@ -102,27 +106,50 @@ const GameController = (() => {
   const playerMove = num => {
     const clickedField = GameBoard.getField(num);
     // only fill the field if empty
-    if (typeof clickedField === 'number' && !_checkWin(GameBoard, _computer)) {
-      GameBoard.setField(_player1, num);
-      // check if player is already won
-      if (_checkWin(GameBoard, _player1)) {
-        endGame(_player1);
-      } else if (_checkDraw(GameBoard)) {
-        endGame('draw');
-      } else {
-        computerMove();
+    if (_mode === 'computer') {
+      if (
+        typeof clickedField === 'number' &&
+        !_checkWin(GameBoard, _computer)
+      ) {
+        GameBoard.setField(_player1, num);
+        // check if player is already won or it's draw, otherwise, it's computer's turn
+        if (_checkWin(GameBoard, _player1)) {
+          message.textContent = endGame(_player1);
+        } else if (_checkDraw(GameBoard)) {
+          message.textContent = endGame('draw');
+        } else {
+          computerMove();
+        }
+      }
+    } else if (_mode === 'multiple') {
+      const oppositePlayer = currentPlayer === _player1 ? _player2 : _player1;
+      if (
+        typeof clickedField === 'number' &&
+        !_checkWin(GameBoard, oppositePlayer)
+      ) {
+        GameBoard.setField(currentPlayer, num);
+
+        if (_checkWin(GameBoard, currentPlayer)) {
+          message.textContent = endGame(currentPlayer);
+        } else if (_checkDraw(GameBoard)) {
+          message.textContent = endGame('draw');
+        }
+        // afterwards switch the players
+        currentPlayer = oppositePlayer;
       }
     }
+
     return;
   };
 
   const computerMove = () => {
     const bestStepIndex = minimax(GameBoard, _computer).index;
     GameBoard.setField(_computer, bestStepIndex);
+    // check if computer is already won or it's draw, otherwise, it's player's turn
     if (_checkWin(GameBoard, _computer)) {
-      return endGame(_computer);
+      return (message.textContent = endGame(_computer));
     } else if (_checkDraw(GameBoard)) {
-      return endGame('Draw');
+      return (message.textContent = endGame('draw'));
     }
     return;
   };
@@ -131,25 +158,35 @@ const GameController = (() => {
     // before game, clear the board and UI
     GameBoard.resetBoard();
     displayController.clearUI();
-
-    if (_player1.getMark() === 'o') {
-      computerMove();
+    if (_mode === 'computer') {
+      if (_player1.getMark() === 'o') {
+        computerMove();
+      }
+    } else if (_mode === 'multiple') {
+      // setting the currentPlayer
+      _player1.getMark() === 'o'
+        ? (currentPlayer = _player2)
+        : (currentPlayer = _player1);
     }
   };
 
   // checking the state of game : draw or win possibilities
 
-  const _allFilledFields = GameBoard.availableFields().length === 0;
+  // const _allFilledFields = GameBoard.availableFields().length === 0;
 
   const _checkDraw = board => {
     // if we have win or all fields are not filled,return false,otherwise true
-    if (
-      _checkWin(board, _player1) ||
-      // _checkWin(board, _player2) ||
-      _checkWin(board, _computer)
-    ) {
-      return false;
+    // checking for draw based on mode (either player2 or computer)
+    if (_player2) {
+      if (_checkWin(board, _player1) || _checkWin(board, _player2)) {
+        return false;
+      }
+    } else if (_computer) {
+      if (_checkWin(board, _player1) || _checkWin(board, _computer)) {
+        return false;
+      }
     }
+
     for (let i = 0; i < 9; i++) {
       const field = board.getField(i);
       if (typeof field === 'number') {
@@ -167,9 +204,11 @@ const GameController = (() => {
 
   const endGame = player => {
     if (player === 'draw') {
+      console.log('draw');
       return 'draw';
     } else {
-      return `${player} has won the game`;
+      console.log(player.getMark(), ' has won ');
+      return `${player.getMark()} has won the game`;
     }
   };
 
@@ -188,6 +227,7 @@ const GameController = (() => {
     const moves = [];
 
     for (let i = 0; i < emptySpots.length; i++) {
+      // individual move,should have index and score of a given empty field
       let move = {};
       // set the index of the board.availableFields() field to the move
       move.index = emptySpots[i];

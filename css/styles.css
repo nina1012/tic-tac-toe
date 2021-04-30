@@ -80,6 +80,7 @@ h1::before {
   display: none;
 }
 
+
 .game {
   margin-top: 3rem;
   display: flex;
@@ -161,6 +162,11 @@ h1::before {
 
 .btn.player {
   width: 10rem;
+}
+
+.message {
+  display: block;
+  height: 5rem;
 }
 
 @keyframes fadeIn {
