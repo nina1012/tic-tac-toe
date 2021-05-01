@@ -329,7 +329,7 @@ const UIController = (() => {
       document.querySelector('.game').style.display = 'flex';
       document.querySelector('.settings').style.display = 'none';
       GameController.startGame();
-    }, 500);
+    }, 200);
   };
 
   const clearUI = () => {

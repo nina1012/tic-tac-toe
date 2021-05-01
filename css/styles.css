@@ -78,6 +78,10 @@ h1::before {
   margin-top: 2rem;
 }
 
+.options {
+  justify-content: center;
+}
+
 .players {
   display: none;
 }
