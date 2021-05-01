@@ -115,7 +115,7 @@ const GameController = (() => {
         } else if (_checkDraw(GameBoard)) {
           endGame('draw');
         } else {
-          computerMove();
+          setTimeout(computerMove, 500);
         }
       }
     } else if (_mode === 'multiple') {
