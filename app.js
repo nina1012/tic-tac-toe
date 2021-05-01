@@ -40,6 +40,7 @@ const GameBoard = (() => {
     _board[num] = player.getMark();
   };
 
+  // set board to initial state
   const resetBoard = () => {
     for (let i = 0; i < _board.length; i++) {
       _board[i] = i;
@@ -67,10 +68,6 @@ const GameController = (() => {
   const getComputer = () => _computer;
   const getMode = () => _mode;
   const setMode = mode => (_mode = mode);
-  let currentPlayer;
-
-  // shows state of game or who plays when mode is multiple (play with friend)
-  const message = document.querySelector('.message');
 
   const _winningCombinations = [
     [0, 1, 2],
@@ -114,9 +111,9 @@ const GameController = (() => {
         GameBoard.setField(_player1, num);
         // check if player is already won or it's draw, otherwise, it's computer's turn
         if (_checkWin(GameBoard, _player1)) {
-          message.textContent = endGame(_player1);
+          endGame(_player1);
         } else if (_checkDraw(GameBoard)) {
-          message.textContent = endGame('draw');
+          endGame('draw');
         } else {
           computerMove();
         }
@@ -130,12 +127,13 @@ const GameController = (() => {
         GameBoard.setField(currentPlayer, num);
 
         if (_checkWin(GameBoard, currentPlayer)) {
-          message.textContent = endGame(currentPlayer);
+          endGame(currentPlayer);
         } else if (_checkDraw(GameBoard)) {
-          message.textContent = endGame('draw');
+          endGame('draw');
         }
         // afterwards switch the players
         currentPlayer = oppositePlayer;
+        `${currentPlayer.getMark()}'s turn`;
       }
     }
 
@@ -147,9 +145,9 @@ const GameController = (() => {
     GameBoard.setField(_computer, bestStepIndex);
     // check if computer is already won or it's draw, otherwise, it's player's turn
     if (_checkWin(GameBoard, _computer)) {
-      return (message.textContent = endGame(_computer));
+      return endGame(_computer);
     } else if (_checkDraw(GameBoard)) {
-      return (message.textContent = endGame('draw'));
+      return endGame('draw');
     }
     return;
   };
@@ -157,7 +155,7 @@ const GameController = (() => {
   const startGame = () => {
     // before game, clear the board and UI
     GameBoard.resetBoard();
-    displayController.clearUI();
+    UIController.clearUI();
     if (_mode === 'computer') {
       if (_player1.getMark() === 'o') {
         computerMove();
@@ -196,6 +194,7 @@ const GameController = (() => {
     return true;
   };
 
+  // if [1,2,3] have the same mark [x,x,x] or [o,o,o] from winning-combination array
   const _checkWin = (board, player) => {
     return _winningCombinations.some(combo => {
       return combo.every(index => board.getField(index) === player.getMark());
@@ -205,10 +204,12 @@ const GameController = (() => {
   const endGame = player => {
     if (player === 'draw') {
       console.log('draw');
+      UIController.gameOverMessage('draw');
       return 'draw';
     } else {
-      console.log(player.getMark(), ' has won ');
-      return `${player.getMark()} has won the game`;
+      let winner = player.getMark();
+      UIController.gameOverMessage(winner);
+      return `${winner} has won the game`;
     }
   };
 
@@ -283,23 +284,41 @@ const GameController = (() => {
 })();
 
 // controls UI
-const displayController = (() => {
+const UIController = (() => {
   const modeOptions = document.querySelectorAll('.option');
+  const playAgainBtn = document.querySelector('.play-again');
   const players = document.querySelectorAll('.player');
   const fields = [...document.querySelectorAll('.field')];
+  const game = document.querySelector('.game');
+  const messageBox = document.querySelector('.message-box');
 
-  const _initialLoad = (() => {
+  const _initialLoad = () => {
     fields.forEach((field, i) =>
       field.addEventListener('click', GameController.playerMove.bind(this, i))
     );
     GameBoard.resetBoard();
-  })();
+    messageBox.classList.remove('show');
+    messageBox.classList.add('hide');
+    game.style.filter = 'blur(0)';
+    document.querySelector('.options').style.display = 'block';
+  };
 
-  // _initialLoad();
+  _initialLoad();
 
   const _chooseMode = mode => {
     GameController.setMode(mode);
+
+    // only on larger screens display mode and player settings at the same time
+    if (window.innerWidth <= 450 && window.innerWidth >= 320) {
+      document.querySelector('.options').style.display = 'none';
+      document.querySelector('.players').style.display = 'block';
+
+      return;
+    }
     document.querySelector('.players').style.display = 'block';
+
+    document.querySelector('.settings').style.display = 'block';
+
     // restart the board and UI
   };
 
@@ -308,7 +327,6 @@ const displayController = (() => {
     document.querySelector('.game').style.display = 'flex';
     document.querySelector('.settings').style.display = 'none';
     // restart the board and UI
-    // _initialLoad();
     GameController.startGame();
   };
 
@@ -323,7 +341,31 @@ const displayController = (() => {
   players.forEach(player =>
     player.addEventListener('click', _chooseMark.bind(this, player.id))
   );
+
+  // reset everything (board, ui, hide the board)
+  playAgainBtn.addEventListener('click', e => {
+    e.target.parentNode.classList.remove('show');
+    setTimeout(() => {
+      clearUI();
+      _initialLoad();
+      // show settings and hide board and players option
+      document.querySelector('.game').style.display = 'none';
+      document.querySelector('.settings').style.display = 'flex';
+      document.querySelector('.players').style.display = 'none';
+    }, 500);
+  });
+
+  const gameOverMessage = player => {
+    const winner = document.querySelector('.winner');
+    // messageBox.classList.remove('hide');
+    messageBox.style.transform = 'scale(1)';
+    messageBox.classList.add('show');
+    game.style.filter = 'blur(10px)';
+    winner.textContent =
+      player !== 'draw' ? `${player.toUpperCase()} has won` : 'Draw';
+  };
   return {
-    clearUI
+    clearUI,
+    gameOverMessage
   };
 })();
