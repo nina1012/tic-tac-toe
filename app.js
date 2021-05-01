@@ -300,34 +300,36 @@ const UIController = (() => {
     messageBox.classList.remove('show');
     messageBox.classList.add('hide');
     game.style.filter = 'blur(0)';
-    document.querySelector('.options').style.display = 'block';
+    document.querySelector('.options').style.display = 'flex';
   };
 
   _initialLoad();
 
   const _chooseMode = mode => {
     GameController.setMode(mode);
-
     // only on larger screens display mode and player settings at the same time
     if (window.innerWidth <= 450 && window.innerWidth >= 320) {
-      document.querySelector('.options').style.display = 'none';
-      document.querySelector('.players').style.display = 'block';
+      setTimeout(() => {
+        document.querySelector('.options').style.display = 'none';
+        document.querySelector('.players').style.display = 'block';
+      }, 500);
 
       return;
     }
-    document.querySelector('.players').style.display = 'block';
-
-    document.querySelector('.settings').style.display = 'block';
-
-    // restart the board and UI
+    setTimeout(() => {
+      document.querySelector('.players').style.display = 'block';
+      document.querySelector('.settings').style.display = 'flex';
+    }, 500);
   };
 
   const _chooseMark = mark => {
     GameController.changeMark(mark, GameController.getMode());
-    document.querySelector('.game').style.display = 'flex';
-    document.querySelector('.settings').style.display = 'none';
-    // restart the board and UI
-    GameController.startGame();
+
+    setTimeout(() => {
+      document.querySelector('.game').style.display = 'flex';
+      document.querySelector('.settings').style.display = 'none';
+      GameController.startGame();
+    }, 500);
   };
 
   const clearUI = () => {
@@ -357,10 +359,9 @@ const UIController = (() => {
 
   const gameOverMessage = player => {
     const winner = document.querySelector('.winner');
-    // messageBox.classList.remove('hide');
     messageBox.style.transform = 'scale(1)';
     messageBox.classList.add('show');
-    game.style.filter = 'blur(10px)';
+    game.style.filter = 'blur(5px)';
     winner.textContent =
       player !== 'draw' ? `${player.toUpperCase()} has won` : 'Draw';
   };

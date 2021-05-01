@@ -83,7 +83,7 @@ h1::before {
 }
 
 .game {
-  margin-top: 10rem;
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -157,10 +157,11 @@ h1::before {
 
 .btn:hover {
   cursor: pointer;
+  background-color: #19be82;
   color: var(--light-gray);
 }
 .btn:active {
-  transform: translateY(1.5px);
+  transform: translateY(3px);
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.7);
 }
 .btn.active {
@@ -209,12 +210,21 @@ h1::before {
     font-size: 4rem;
   }
   .game {
+    margin-top: 2rem;
+  }
+
+  .options {
+    height: 15rem;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .game {
     margin-top: 7rem;
   }
-  /* .message-box {
-    left: 20%;
-    top: 20%;
-  } */
 }
 
 @keyframes fadeIn {

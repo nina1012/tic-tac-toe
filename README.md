@@ -2,6 +2,8 @@
 
 This is in browser version of the famous [tic-tac-toe game](https://en.wikipedia.org/wiki/Tic-tac-toe).
 
+[Live demo](https://tic-tac-toe-nina1012.vercel.app/)
+
 ### **Overview**
 
 #### Features:
