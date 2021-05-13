@@ -4,6 +4,11 @@ This is in browser version of the famous [tic-tac-toe game](https://en.wikipedia
 
 [Live demo](https://tic-tac-toe-nina1012.vercel.app/)
 
+This repo has 2 branches :
+
+- master
+- refactor-to-classes: this branch has all the functionality as code in master, but it is refactored to classes (player, board and game class)
+
 ### **Overview**
 
 #### Features:
