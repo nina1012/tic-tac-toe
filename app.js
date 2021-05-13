@@ -22,7 +22,6 @@ playAgainBtn.addEventListener('click', e => {
   setTimeout(() => {
     fields.forEach(field => (field.textContent = ''));
     initialLoad();
-
     // show settings and hide board and players option
     document.querySelector('.game').style.display = 'none';
     document.querySelector('.settings').style.display = 'flex';
@@ -56,6 +55,7 @@ class Board {
     return this.board[num];
   }
 
+  // setting and displaying in the UI
   setField(player, num) {
     const field = document.querySelector(`[data-number="${num}"]`);
     field.textContent = player.getMark();
@@ -95,6 +95,7 @@ class Game {
   ];
 
   board = new Board();
+  // keeps track of who is the currentPlayer when mode is multiple
   currentPlayer;
 
   constructor(player1, player2, computer, mode) {
@@ -113,6 +114,7 @@ class Game {
 
   startGame() {
     // before game, clear the board and UI
+    this.board.resetBoard();
     if (this.mode === 'computer') {
       if (this.player1.getMark() === 'o') {
         // computer's turn
@@ -120,13 +122,13 @@ class Game {
       }
     } else if (this.mode === 'multiple') {
       // setting the currentPlayer
-      console.log(this.currentPlayer);
       this.player1.getMark() === 'o'
         ? (this.currentPlayer = this.player2)
         : this.player1;
     }
   }
 
+  // needed to make it arrow function, to keep it bound to class
   playerMove = num => {
     const clickedField = this.board.getField(num);
     // only fill the field if empty
@@ -267,7 +269,10 @@ class Game {
   }
 }
 
-// current board and current player
+// minimax algorithm implementation
+// takes as arguments (current board state and current player)
+// and for each empty field in current board, it will calculate what is the best move for the computer
+
 function minimax(board, player) {
   const emptySpots = board.getAvailableFields();
   // base case : if any of these are true, the current recursion should be stopped
