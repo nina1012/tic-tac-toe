@@ -83,7 +83,8 @@ class Board {
 
 // controls the state of the game,players
 class Game {
-  static WINNING_COMBINATION = [
+  // ** fields are currenlty only supported in Chrome, Mozilla doesn't support it yet
+  WINNING_COMBINATION = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -175,7 +176,6 @@ class Game {
 
   computerMove() {
     const bestStepIndex = minimax.call(this, this.board, this.computer).index;
-    console.log(bestStepIndex);
     this.board.setField(this.computer, bestStepIndex);
 
     // check if computer is already won or it's draw, otherwise, it's player's turn
@@ -239,7 +239,7 @@ class Game {
 
   // if [1,2,3] have the same mark [x,x,x] or [o,o,o] from winning-combination array
   checkWin(board, player) {
-    return Game.WINNING_COMBINATION.some(combo => {
+    return this.WINNING_COMBINATION.some(combo => {
       return combo.every(index => board.getField(index) === player.getMark());
     });
   }
